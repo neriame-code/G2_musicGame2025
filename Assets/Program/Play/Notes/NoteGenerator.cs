@@ -17,7 +17,7 @@ public class NoteGenerator : MonoBehaviour
     [Header("Lane Settings")]
     [SerializeField] private Transform[] lines;
 
-    void OnEnable()
+    void Start()
     {
         noteNum = 0;
         LaneNum.Clear();

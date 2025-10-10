@@ -13,6 +13,7 @@ public class MusicDataBase : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            Debug.Log("MusicDataBase Ç™ê≥ÇµÇ≠çÏê¨Ç≥ÇÍÇ‹ÇµÇΩ");
             DontDestroyOnLoad(gameObject);
         }
         else
