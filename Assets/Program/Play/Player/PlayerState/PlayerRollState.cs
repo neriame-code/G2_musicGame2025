@@ -11,6 +11,7 @@ public class PlayerRollState : IPlayerState
     public void EnterState()
     {
         Debug.Log("回転入力");
+        playerObject.SetImage(rollImage);
         // アニメーション処理など
         playerObject.ChangeState(PlayerObject.PlayerState.Idle);
     }
@@ -22,5 +23,6 @@ public class PlayerRollState : IPlayerState
 
     public void ExitState()
     {
+        playerObject.ResetImage();
     }
 }

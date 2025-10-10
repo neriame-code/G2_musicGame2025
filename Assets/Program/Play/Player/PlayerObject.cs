@@ -72,8 +72,17 @@ public class PlayerObject: MonoBehaviour
         }
     }
 
+    public void SetImage(Image image)
+    {
+        playerImage.color = Color.yellow;
+        //if(image != null)
+        //    playerImage = image;
+    }
+
+    public void ResetImage()
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        playerImage.color = Color.white;
         NoteObject note = collision.GetComponent<NoteObject>();
         if (note != null)
         {
