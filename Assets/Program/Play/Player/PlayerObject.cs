@@ -21,6 +21,9 @@ public class PlayerObject: MonoBehaviour
     private InputActionMap playerActionMap;
     public InputActionMap PlayerActionMap { get => this.playerActionMap; }
 
+    private int life = 5;
+    public int Life { get => this.life; set => this.life = value; }
+
     void Awake()
     {
         playerStates.Add(PlayerState.Idle, new PlayerIdleState(this));
@@ -77,7 +80,15 @@ public class PlayerObject: MonoBehaviour
     }
 
     public void ResetImage()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         playerImage.color = Color.white;
+        NoteObject note = collision.GetComponent<NoteObject>();
+        if (note != null)
+        {
+            if(0 < life)
+                life--;
+            Debug.Log("Life: " + life);
+        }
     }
 }

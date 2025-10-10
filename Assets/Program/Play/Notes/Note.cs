@@ -1,11 +1,16 @@
+using System;
 using UnityEngine;
 
-public class Note : MonoBehaviour
+[Serializable]
+public class Note
 {
-    private int floatSpeed = 70;
+    [SerializeField] private int block; // レーン番号
+    [SerializeField] private int type;  // ノートタイプ
+    [SerializeField] private int num;   // 何拍目か
+    [SerializeField] private int LPB;   // 1小節を何分割するか
 
-    void Update()
-    {
-        transform.Translate(0, -floatSpeed * Time.deltaTime, 0);
-    }
+    public int Block { get => block; set => block = value; }
+    public int Type { get => type; set => type = value; }
+    public int Num { get => num; set => num = value; }
+    public int Lpb { get => LPB; set => LPB = value; }
 }
