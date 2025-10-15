@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicName: meow bell
   musicID: 0
-  musicClip: {fileID: 8300000, guid: eeef7e129ba5a214880a0e171fca7c3d, type: 3}
-  musicScore: {fileID: 4900000, guid: 6a07dd97df9447545a504f8063d128a8, type: 3}
+  musicClip: {fileID: 0}
+  musicScore: {fileID: 4900000, guid: 0efc6010d5aade843833bc8f05f3ac30, type: 3}
