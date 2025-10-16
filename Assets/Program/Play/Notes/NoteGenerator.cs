@@ -4,10 +4,9 @@ using UnityEngine;
 public class NoteGenerator : MonoBehaviour
 {
     private int noteNum;
-    [SerializeField] private int targetMusicID = 0;
 
     private List<int> LaneNum = new List<int>();
-    private List<int> NoteType = new List<int>();
+    private List<NoteType> TypeList = new List<NoteType>();
     private List<float> NotesTime = new List<float>();
     private List<GameObject> NotesObj = new List<GameObject>();
 
@@ -21,54 +20,43 @@ public class NoteGenerator : MonoBehaviour
     {
         noteNum = 0;
         LaneNum.Clear();
-        NoteType.Clear();
+        TypeList.Clear();
         NotesTime.Clear();
 
-        ScoreData scoreData = LoadMusic(targetMusicID); // ID を使って曲を読み込む
+        ScoreData scoreData = LoadScoreData();
+
         if (scoreData != null)
         {
             NoteGenerate(scoreData);
+            MusicManager.Instance.PlayMusic();
+        }
+        else
+            Debug.LogError("ノーツの生成を開始できませんでした");
+    }
+
+    private ScoreData LoadScoreData()
+    {
+        MusicData musicData;
+        if (MusicManager.Instance == null)
+        {
+            Debug.LogError("MusicManager のインスタンスが見つかりません");
+            musicData = defaultMusicData;
         }
         else
         {
-            Debug.LogError("ノーツの生成を開始できませんでした。");
-        }
-    }
-
-    private ScoreData LoadMusic(int musicID)
-    {
-        if (MusicDataBase.Instance == null)
-        {
-            Debug.LogError("MusicDataBase.Instance が見つかりません。シーンに配置されているか確認してください。");
-        }
-
-        // MusicDataBase から MusicData を取得
-        MusicData musicData = MusicDataBase.Instance.GetMusicDataByID(musicID);
-
-        if (musicData == null)
-        {
-            Debug.LogError($"MusicID: {musicID} に対応する MusicData が見つかりませんでした。");
-        }
-
-        if (musicData.MusicScore == null)
-        {
-            Debug.LogError($"MusicData: {musicData.MusicName} に楽譜データ (TextAsset) が設定されていません。");
-        }
-
-        if (lines == null || lines.Length == 0)
-        {
-            Debug.LogError("NoteGenerator の lines 配列にレーンオブジェクトが設定されていません。");
+            musicData = MusicManager.Instance.MusicData; // ID を使って曲を読み込む
         }
 
         string inputString = musicData.MusicScore.text;
         ScoreData scoreData = JsonUtility.FromJson<ScoreData>(inputString);
-
         if (scoreData.Notes == null || scoreData.Notes.Length == 0)
-        {
-            Debug.LogWarning($"曲名: {musicData.MusicName} にノーツデータがありませんでした。");
-        }
+            Debug.LogWarning($"曲名: {musicData.MusicName} にノーツデータがありませんでした");
+        else
+            return scoreData;
 
-        return scoreData;
+        string defaultInputString = defaultMusicData.MusicScore.text;
+        ScoreData defaultScoreData = JsonUtility.FromJson<ScoreData>(inputString);
+        return defaultScoreData;
     }
 
     public void NoteGenerate(ScoreData scoreData)
@@ -79,11 +67,13 @@ public class NoteGenerator : MonoBehaviour
         {
             float interval = 60f / (scoreData.Bpm * (float)scoreData.Notes[i].Lpb);
             float beatSec = interval * (float)scoreData.Notes[i].Lpb;
-            float time = (beatSec * scoreData.Notes[i].Num / (float)scoreData.Notes[i].Lpb) + (scoreData.Offset / 1000f) + 0.01f;
+            float time = (beatSec * scoreData.Notes[i].Num / (float)scoreData.Notes[i].Lpb) + scoreData.Offset * 0.01f;
+
+            NoteType noteType = (NoteType)scoreData.Notes[i].Type;
 
             NotesTime.Add(time);
             LaneNum.Add(scoreData.Notes[i].Block);
-            NoteType.Add(scoreData.Notes[i].Type);
+            TypeList.Add(noteType);
 
             // ノートがどのレーンに属するかを取得
             int laneIndex = scoreData.Notes[i].Block;
@@ -111,7 +101,7 @@ public class NoteGenerator : MonoBehaviour
             NoteObject noteObj = newNote.GetComponent<NoteObject>();
             if (noteObj != null)
             {
-                noteObj.Initialize(time, NotesSpeed * scoreData.Bpm / 2);
+                noteObj.Initialize(time, NotesSpeed * scoreData.Bpm / 2, noteType);
             }
             else
             {

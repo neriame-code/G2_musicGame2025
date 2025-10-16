@@ -19,10 +19,10 @@ public class PlayerObject: MonoBehaviour
 
     private PlayerInput playerInput;
     private InputActionMap playerActionMap;
-    public InputActionMap PlayerActionMap { get => this.playerActionMap; }
+    public InputActionMap PlayerActionMap => playerActionMap;
 
     private int life = 5;
-    public int Life { get => this.life; set => this.life = value; }
+    public int Life { get; set; }
 
     void Awake()
     {

@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df7391de6ac57364b8d5db948de38c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smashObjectColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!61 &-151977076115458638
 BoxCollider2D:
   m_ObjectHideFlags: 0

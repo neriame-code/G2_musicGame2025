@@ -14,3 +14,9 @@ public class Note
     public int Num { get => num; set => num = value; }
     public int Lpb { get => LPB; set => LPB = value; }
 }
+
+public enum NoteType
+{
+    NORMAL = 1,
+    SMASH = 2,
+}
